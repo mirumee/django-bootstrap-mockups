@@ -1,3 +1,4 @@
+.*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -51,4 +52,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-.*
+
+# generated content
+styleguide/static/bootstrap_docs/
+styleguide/templates/bootstrap_docs/

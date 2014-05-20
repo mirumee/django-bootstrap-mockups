@@ -26,7 +26,7 @@ class PrepareStaticAndTemplatesCommand(develop):
     def run(self):
         self.initialize_git_submodules()
         self.build_bootstrap_docs_templates()
-        self.copy_bootstrap_docs_statics()
+        self.copy_bootstrap_docs_static_files()
         develop.run(self)
 
 
