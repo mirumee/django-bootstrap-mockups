@@ -11,7 +11,7 @@ def get_template(request, name, is_mockup=False):
     context = get_context()
     context['template_name'] = name
     if is_mockup:
-        template = 'mockups/%s.html' % (name,)
+        template = 'styleguide/mockups/%s.html' % (name,)
     else:
         template = 'bootstrap_docs/%s.html' % (name,)
         context['forms'] = {
