@@ -1,0 +1,3 @@
+source: ../bootstrap/docs
+destination: ../styleguide/templates/bootstrap
+layouts: [../../jekyll/_layouts]
