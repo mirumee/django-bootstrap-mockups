@@ -2,31 +2,37 @@
 from subprocess import check_call
 from setuptools import setup, find_packages
 from setuptools.command.develop import develop
+from os.path import join
 
 
 class PrepareStaticAndTemplatesCommand(develop):
 
-    @staticmethod
-    def initialize_git_submodules():
+    STATIC_DIR = 'styleguide/static'
+
+    def initialize_git_submodules(self):
         check_call(['git', 'submodule', 'init'])
         check_call(['git', 'submodule', 'update'])
 
-    @staticmethod
-    def build_bootstrap_docs_templates():
+    def build_bootstrap_docs_templates(self):
         check_call(['(cd jekyll/; jekyll build)'], shell=True)
 
-    @staticmethod
-    def copy_bootstrap_docs_static_files():
+    def copy_bootstrap_docs_static_files(self):
         # todo: windows compatibility
-        static_path = 'styleguide/static/bootstrap_docs'
-        check_call(['mkdir', '-p', static_path])
-        check_call(['cp', '-r', 'bootstrap/docs/dist', static_path])
-        check_call(['cp', '-r', 'bootstrap/docs/assets', static_path])
+        static_dir = join(self.STATIC_DIR, 'bootstrap_docs')
+        check_call(['mkdir', '-p', static_dir])
+        check_call(['cp', '-r', 'bootstrap/docs/dist', static_dir])
+        check_call(['cp', '-r', 'bootstrap/docs/assets', static_dir])
+
+    def copy_bootstrap_less_files_to_static(self):
+        less_dir = join(self.STATIC_DIR, 'less')
+        check_call(['mkdir', '-p', less_dir])
+        check_call(['cp', '-r', 'bootstrap/less', 'styleguide/static/less/bootstrap'])
 
     def run(self):
         self.initialize_git_submodules()
         self.build_bootstrap_docs_templates()
         self.copy_bootstrap_docs_static_files()
+        self.copy_bootstrap_less_files_to_static()
         develop.run(self)
 
 

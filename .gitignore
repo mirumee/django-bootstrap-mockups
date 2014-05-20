@@ -54,5 +54,5 @@ coverage.xml
 docs/_build/
 
 # generated content
-styleguide/static/bootstrap_docs/
+styleguide/static/
 styleguide/templates/bootstrap_docs/
