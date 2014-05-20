@@ -1,0 +1,29 @@
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="{% url "index" %}" class="navbar-brand">Bootstrap</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li{% if template_name == "getting-started" %} class="active"{% endif %}>
+          <a href="{% url "bootstrap" name="getting-started" %}">Getting started</a>
+        </li>
+        <li{% if template_name == "css" %} class="active"{% endif %}>
+          <a href="{% url "bootstrap" name="css" %}">CSS</a>
+        </li>
+        <li{% if template_name == "components" %} class="active"{% endif %}>
+          <a href="{% url "bootstrap" name="components" %}">Components</a>
+        </li>
+        <li{% if template_name == "javascript" %} class="active"{% endif %}>
+          <a href="{% url "bootstrap" name="javascript" %}">JavaScript</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

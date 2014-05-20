@@ -1,0 +1,38 @@
+{% load static %}
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
+<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
+<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+
+<title>{{ config.title }}</title>
+
+<!-- Bootstrap core CSS -->
+{% if config.type == 'less' %}
+    <link rel="stylesheet/less" type="text/css" href="{% static "less/bootstrap/bootstrap.less" %}"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+{% else %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+{% endif %}
+
+<!-- Documentation extras -->
+<link href="{% static "bootstrap_docs/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "bootstrap_docs/assets/css/docs.min.css" %}" rel="stylesheet">
+<!--[if lt IE 9]><script src="{% static "bootstrap_docs/assets/js/ie8-responsive-file-warning.js" %}"></script><![endif]-->
+
+<!-- Favicons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "bootstrap_docs/assets/ico/apple-touch-icon-144-precomposed.png" %}">
+                                   <link rel="shortcut icon" href="{% static "bootstrap_docs/assets/ico/favicon.ico" %}">
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script>
+  var _gaq = _gaq || [];
+</script>
+
