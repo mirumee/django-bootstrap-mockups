@@ -2,8 +2,7 @@
 import os
 from contextlib import contextmanager
 from subprocess import check_call
-from setuptools import setup, find_packages
-from setuptools.command.develop import develop
+from setuptools import setup, find_packages, Command
 from shutil import copytree, rmtree
 
 
@@ -17,13 +16,11 @@ def cwd(path):
         os.chdir(old_path)
 
 
-class PrepareStaticAndTemplatesCommand(develop):
+class PrepareStaticAndTemplatesCommand(Command):
 
     STATIC_DIR = 'styleguide/static'
-
-    def initialize_git_submodules(self):
-        check_call(['git', 'submodule', 'init'])
-        check_call(['git', 'submodule', 'update'])
+    description = 'Copy static data and compile bootstrap docs'
+    user_options = []
 
     def build_bootstrap_docs_templates(self):
         with cwd('jekyll'):
@@ -44,16 +41,19 @@ class PrepareStaticAndTemplatesCommand(develop):
             rmtree(less_dir)
         copytree('bootstrap/less', less_dir)
 
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
     def run(self):
-        print('Initialize git submodues')
-        self.initialize_git_submodules()
         print('Build bootstrap templates')
         self.build_bootstrap_docs_templates()
         print('Copy bootstrap docs static files')
         self.copy_bootstrap_docs_static_files()
-        print('Copy bootstrap less')
+        print('Copy bootstrap less files')
         self.copy_bootstrap_less_files_to_static()
-        develop.run(self)
 
 
 CLASSIFIERS = [
@@ -87,6 +87,6 @@ setup(
     ],
     classifiers=CLASSIFIERS,
     cmdclass={
-        'develop': PrepareStaticAndTemplatesCommand
+        'build_bootstrap': PrepareStaticAndTemplatesCommand
     }
 )
