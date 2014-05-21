@@ -1,7 +1,7 @@
 Django bootstrap styleguide
 ===========================
 
-Mirumee's style-guide and mock-up Django app for Boostrap-based projects
+Mirumee's style guide and mockup app for Django projects based on Boostrap
 
 
 For contributors
@@ -10,21 +10,15 @@ For contributors
 
 Project preparation
 
-1. Clone the repository with submodules:
+```console
+# clone the repository with submodules
+$ git clone --recursive https://github.com/mirumee/django-bootstrap-styleguide.git
+# go into repository
+$ cd django-bootstrap-styleguide
+# setup project in development mode
+$ python setup.py develop
+# build bootstrap templates and copy static files
+$ python setup.py build_bootstrap
+```
 
-    ```git clone --recursive https://github.com/mirumee/django-bootstrap-styleguide.git```
-
-2. Go into repository:
-
-    ```cd django-bootstrap-styleguide```
-
-3. Setup project as develop:
-
-    ```./setup.py develop```
-
-4. Build bootstrap templates and copy bootstrap statics:
-
-    ```./setup.py build_bootstrap```
-
-
-Run the `build_bootstrap` command always after `jekyll` files editing.
+Remember to re-run `python setup.py build_bootstrap` if you change any `jekyll` templates.
