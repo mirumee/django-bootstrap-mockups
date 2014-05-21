@@ -1,8 +1,20 @@
 #! /usr/bin/env python
+import os
+from contextlib import contextmanager
 from subprocess import check_call
 from setuptools import setup, find_packages
 from setuptools.command.develop import develop
-from os.path import join
+from shutil import copytree, rmtree
+
+
+@contextmanager
+def cwd(path):
+    old_path = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(old_path)
 
 
 class PrepareStaticAndTemplatesCommand(develop):
@@ -14,24 +26,32 @@ class PrepareStaticAndTemplatesCommand(develop):
         check_call(['git', 'submodule', 'update'])
 
     def build_bootstrap_docs_templates(self):
-        check_call(['(cd jekyll/; jekyll build)'], shell=True)
+        with cwd('jekyll'):
+            check_call(['jekyll', 'build'])
 
     def copy_bootstrap_docs_static_files(self):
-        # todo: windows compatibility
-        static_dir = join(self.STATIC_DIR, 'bootstrap_docs')
-        check_call(['mkdir', '-p', static_dir])
-        check_call(['cp', '-r', 'bootstrap/docs/dist', static_dir])
-        check_call(['cp', '-r', 'bootstrap/docs/assets', static_dir])
+        static_docs_path = os.path.join(self.STATIC_DIR, 'bootstrap_docs')
+        if os.path.exists(static_docs_path):
+            rmtree(static_docs_path)
+        dist_path = os.path.join(static_docs_path, 'dist')
+        copytree('bootstrap/docs/dist', dist_path)
+        assets_path = os.path.join(static_docs_path, 'assets')
+        copytree('bootstrap/docs/assets', assets_path)
 
     def copy_bootstrap_less_files_to_static(self):
-        less_dir = join(self.STATIC_DIR, 'less')
-        check_call(['mkdir', '-p', less_dir])
-        check_call(['cp', '-r', 'bootstrap/less', 'styleguide/static/less/bootstrap'])
+        less_dir = os.path.join(self.STATIC_DIR, 'less/bootstrap')
+        if os.path.exists(less_dir):
+            rmtree(less_dir)
+        copytree('bootstrap/less', less_dir)
 
     def run(self):
+        print('Initialize git submodues')
         self.initialize_git_submodules()
+        print('Build bootstrap templates')
         self.build_bootstrap_docs_templates()
+        print('Copy bootstrap docs static files')
         self.copy_bootstrap_docs_static_files()
+        print('Copy bootstrap less')
         self.copy_bootstrap_less_files_to_static()
         develop.run(self)
 
