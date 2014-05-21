@@ -1,0 +1,2 @@
+recursive-include styleguide/static *
+recursive-include styleguide/templates *.html
