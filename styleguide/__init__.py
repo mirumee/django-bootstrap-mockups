@@ -3,6 +3,7 @@ import importlib
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
+
 STYLE_GUIDE_CONFIG = {
     'title': 'Bootstrap',
     'type': 'less',
@@ -15,7 +16,10 @@ STYLE_GUIDE_CONFIG.update(getattr(settings, 'STYLE_GUIDE_CONFIG', {}))
 def get_context():
     context = STYLE_GUIDE_CONFIG['context']
     if isinstance(context, str):
-        context = importlib.import_module(context)
+        context_module = importlib.import_module(context)
+        if not hasattr(context_module, 'context'):
+            raise ImproperlyConfigured('%s module should contains context dict' % context)
+        context = context_module.context
     if not isinstance(context, dict):
         raise ImproperlyConfigured('Style guide context must be a dict object')
     context = context.copy()
