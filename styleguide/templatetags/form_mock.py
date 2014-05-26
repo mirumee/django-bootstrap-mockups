@@ -37,7 +37,7 @@ def prepare_field(context, field_name, **kwargs):
         if field_type in ['multi_select', 'checkbox']:
             initial = kwargs.get('initial')
             kwargs['initial'] = initial.split(',') if initial else None
-    kwargs['field_class'], kwargs['widget'] = FIELD_TYPE_MAPPING.get(field_type)
+    kwargs['field_class'], kwargs['widget'] = FIELD_TYPE_MAPPING[field_type]
     form.fields_kwargs[field_name] = kwargs
     return ''
 
