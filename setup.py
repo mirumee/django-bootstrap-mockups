@@ -92,7 +92,6 @@ setup(
     install_requires=[
         'Django>=1.6.5',
         'django-bootstrap3>=4.4.1',
-        'fake-factory>=0.4.0',
     ],
     classifiers=CLASSIFIERS,
     cmdclass={

@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django import forms
 from django.forms.forms import BoundField, pretty_name
 from django.template import TemplateSyntaxError
@@ -45,13 +47,21 @@ class FieldMock(object):
 
 class FormFactory(object):
 
-    def __init__(self, request):
-        self.request = request
+    fields_kwargs = None
 
-    def __getattr__(self, name):
+    def __init__(self):
+        self.fields_kwargs = defaultdict(dict)
+        self.form = forms.Form()
+
+    def non_field_errors(self):
+        return self.form.non_field_errors()
+
+    def __getitem__(self, name):
+        kwargs = self.fields_kwargs[name]
+        field_class = kwargs.pop('field_class', forms.CharField)
         try:
-            field = getattr(forms, name)
-        except AttributeError:
-            raise TemplateSyntaxError('Can not load %s from forms' % (name,))
+            bound_field = BoundField(form=self.form, field=field_class(**kwargs), name=name)
+        except TypeError:
+            raise TemplateSyntaxError('Bad keywords in %s field' % (name,))
         else:
-            return FieldMock(field)
+            return bound_field
