@@ -18,7 +18,7 @@ FIELD_TYPE_MAPPING = defaultdict(lambda: (forms.CharField, None), {
     'datetime': (forms.DateTimeField, None),
     'select': (forms.ChoiceField, None),
     'multi_select': (forms.MultipleChoiceField, None),
-    'text': (forms.ChoiceField, forms.Textarea),
+    'text': (forms.CharField, forms.Textarea),
     'url': (forms.URLField, None),
     'checkbox': (forms.MultipleChoiceField, forms.CheckboxSelectMultiple),
     'radio': (forms.ChoiceField, forms.RadioSelect),
@@ -39,4 +39,16 @@ def prepare_field(context, field_name, **kwargs):
             kwargs['initial'] = initial.split(',') if initial else None
     kwargs['field_class'], kwargs['widget'] = FIELD_TYPE_MAPPING.get(field_type)
     form.fields_kwargs[field_name] = kwargs
+    return ''
+
+
+@register.simple_tag(takes_context=True)
+def prepare_errors(context, **kwargs):
+    form = context['form']
+    force_show = kwargs.pop('force_show', False)
+    if force_show:
+        form.data = {}
+    for name, errors in kwargs.items():
+        for error in errors.split(','):
+            form.errors[name].append(error)
     return ''
