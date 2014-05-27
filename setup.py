@@ -41,6 +41,12 @@ class PrepareStaticAndTemplatesCommand(Command):
             rmtree(less_dir)
         copytree('bootstrap/less', less_dir)
 
+    def copy_bootstrap_fonts_files_to_static(self):
+        less_dir = os.path.join(self.STATIC_DIR, 'fonts')
+        if os.path.exists(less_dir):
+            rmtree(less_dir)
+        copytree('bootstrap/fonts', less_dir)
+
     def copy_bootstrap_sass_files_to_static(self):
         less_dir = os.path.join(self.STATIC_DIR, 'sass/bootstrap')
         if os.path.exists(less_dir):
@@ -62,6 +68,8 @@ class PrepareStaticAndTemplatesCommand(Command):
         self.copy_bootstrap_less_files_to_static()
         print('Copy bootstrap sass files')
         self.copy_bootstrap_sass_files_to_static()
+        print('Copy bootstrap fonts')
+        self.copy_bootstrap_fonts_files_to_static()
 
 
 CLASSIFIERS = [

@@ -1,23 +1,32 @@
+from collections import defaultdict
+
+from django.contrib import messages
 from django.http import Http404
 from django.template.base import TemplateDoesNotExist
 from django.template.loader import find_template
 from django.template.response import TemplateResponse
 
-from .forms import BasicExampleForm, ExampleForm
+from .forms import FormFactory
 from . import get_context
+
+
+def add_messages_from_request(request):
+    data = request.POST or request.GET
+    for name, message in data.items():
+        if name.endswith('_message'):
+            message_type = getattr(messages, name[:-8].upper(), messages.INFO)
+            messages.add_message(request, message_type, message)
 
 
 def get_template(request, name, is_mockup=False):
     context = get_context()
     context['template_name'] = name
     if is_mockup:
+        add_messages_from_request(request)
+        context['form'] = FormFactory(data=request.POST or request.GET)
         template = 'styleguide/mockups/%s.html' % (name,)
     else:
         template = 'bootstrap_docs/%s.html' % (name,)
-        context['forms'] = {
-            'basic': BasicExampleForm(),
-            'small': ExampleForm()
-        }
     try:
         find_template(template)
     except TemplateDoesNotExist:
