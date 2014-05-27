@@ -3,7 +3,6 @@ import importlib
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-
 STYLE_GUIDE_CONFIG = {
     'title': 'Bootstrap',
     'type': 'less',
