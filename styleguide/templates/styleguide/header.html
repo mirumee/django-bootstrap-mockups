@@ -11,14 +11,17 @@
 
 <!-- Bootstrap core CSS -->
 {% if config.type == 'less' %}
-    <link rel="stylesheet/less" type="text/css" href="{% static "less/bootstrap/bootstrap.less" %}"/>
+    {% for less_url, css_url in config.style_files %}
+    <link rel="stylesheet/less" type="text/css" href="{% static less_url %}"/>
+    {% endfor %}
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
 {% else %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+    {% for sass_url, css_url in config.style_files %}
+    <link rel="stylesheet" type="text/css" href="{% static css_url %}">
+    {% endfor %}
 {% endif %}
 
 <!-- Documentation extras -->
-<link href="{% static "bootstrap_docs/dist/css/bootstrap.min.css" %}" rel="stylesheet">
 <link href="{% static "bootstrap_docs/assets/css/docs.min.css" %}" rel="stylesheet">
 <!--[if lt IE 9]><script src="{% static "bootstrap_docs/assets/js/ie8-responsive-file-warning.js" %}"></script><![endif]-->
 
