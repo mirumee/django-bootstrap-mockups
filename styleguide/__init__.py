@@ -8,21 +8,19 @@ STYLE_GUIDE_CONFIG = {
     'title': 'Bootstrap',
     'type': 'less',
     'context': {},
-    'input_file': None,
-    'output_file': None
+    'style_files': None
 }
 
 STYLE_GUIDE_CONFIG.update(getattr(settings, 'STYLE_GUIDE_CONFIG', {}))
 
-if not STYLE_GUIDE_CONFIG['input_file']:
+if not STYLE_GUIDE_CONFIG['style_files']:
     style_type = STYLE_GUIDE_CONFIG['type']
     name = 'style.scss' if style_type == 'sass' else 'style.less'
-    STYLE_GUIDE_CONFIG['input_file'] = path.join(
+    input_file = path.join(
         settings.STATIC_ROOT, style_type, name)
-
-if not STYLE_GUIDE_CONFIG['output_file']:
-    STYLE_GUIDE_CONFIG['output_file'] = path.join(
+    output_file = path.join(
         settings.STATIC_ROOT, 'css', 'style.css')
+    STYLE_GUIDE_CONFIG['style_files'] = ((input_file, output_file),)
 
 
 def get_context():
