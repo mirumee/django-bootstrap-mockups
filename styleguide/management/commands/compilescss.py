@@ -1,4 +1,7 @@
+from os import path
+
 from django.core.management import BaseCommand, CommandError
+from django.conf import settings
 
 from ... import STYLE_GUIDE_CONFIG
 from ...utils import compile_scss_file
@@ -8,10 +11,16 @@ class Command(BaseCommand):
     help = 'Compile scss files to css'
 
     def handle(self, *args, **options):
-        for input_file, output_file in STYLE_GUIDE_CONFIG['style_files']:
+        for input_file, output_file in self.get_style_files():
             try:
                 compile_scss_file(input_file, output_file)
             except IOError as e:
                 raise CommandError(e.message)
             else:
                 self.stdout.write('%s > %s' % (input_file, output_file))
+
+    def get_style_files(self):
+        style_files = STYLE_GUIDE_CONFIG['style_files']
+        css_root = STYLE_GUIDE_CONFIG['css_root']
+        for input_file, output_file in style_files:
+            yield path.join(settings.STATIC_ROOT, input_file), path.join(css_root, output_file)
