@@ -8,9 +8,16 @@ from watchdog.events import PatternMatchingEventHandler
 
 class CompileSCSSEventHandler(PatternMatchingEventHandler):
 
+    _files_changed = False
+
     def on_modified(self, event):
-        call_command('collectstatic', interactive=False, verbosity=0)
-        call_command('compilescss')
+        self._files_changed = True
+
+    @property
+    def files_changed(self):
+        files_changed = self._files_changed
+        self._files_changed = False
+        return files_changed
 
 
 class Command(BaseCommand):
@@ -28,7 +35,10 @@ class Command(BaseCommand):
         observer.start()
         try:
             while True:
-                time.sleep(1)
+                time.sleep(2)
+                if event_handler.files_changed:
+                    call_command('collectstatic', interactive=False, verbosity=0)
+                    call_command('compilescss')
         except KeyboardInterrupt:
             observer.stop()
         observer.join()
