@@ -99,7 +99,8 @@ setup(
     include_package_data=True,
     install_requires=[
         'Django>=1.6.5',
-        'django-bootstrap3>=4.4.1'
+        'django-bootstrap3>=4.4.1',
+        'watchdog>=0.7.1'
     ],
     classifiers=CLASSIFIERS,
     cmdclass={

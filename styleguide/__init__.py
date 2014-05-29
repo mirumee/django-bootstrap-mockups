@@ -1,4 +1,5 @@
 import importlib
+from os import path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -6,10 +7,24 @@ from django.core.exceptions import ImproperlyConfigured
 STYLE_GUIDE_CONFIG = {
     'title': 'Bootstrap',
     'type': 'less',
-    'context': {}
+    'context': {},
+    'style_files': None,
+    'css_root': None
 }
 
+if not settings.STATIC_ROOT:
+    raise ImproperlyConfigured('Stylegude requires STATIC_ROOT')
+
 STYLE_GUIDE_CONFIG.update(getattr(settings, 'STYLE_GUIDE_CONFIG', {}))
+
+if not STYLE_GUIDE_CONFIG['css_root']:
+    raise ImproperlyConfigured(
+        'You did not set css root path in the STYLE_GUIDE_CONFIG')
+
+if not STYLE_GUIDE_CONFIG['style_files']:
+    style_type = STYLE_GUIDE_CONFIG['type']
+    input_file = 'style.scss' if style_type == 'sass' else 'style.less'
+    STYLE_GUIDE_CONFIG['style_files'] = ((input_file, 'style.css'),)
 
 
 def get_context():
