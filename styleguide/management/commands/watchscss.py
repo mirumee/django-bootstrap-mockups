@@ -4,13 +4,14 @@ import time
 from django.core.management import call_command, BaseCommand, CommandError
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+from sass import CompileError
 
 
 class CompileSCSSEventHandler(PatternMatchingEventHandler):
 
     _files_changed = False
 
-    def on_modified(self, event):
+    def on_any_event(self, event):
         self._files_changed = True
 
     @property
@@ -35,10 +36,12 @@ class Command(BaseCommand):
         observer.start()
         try:
             while True:
-                time.sleep(2)
+                time.sleep(1)
                 if event_handler.files_changed:
-                    call_command('collectstatic', interactive=False, verbosity=0)
-                    call_command('compilescss')
+                    try:
+                        call_command('compilescss')
+                    except CompileError as e:
+                        self.stdout.write(str(e))
         except KeyboardInterrupt:
             observer.stop()
         observer.join()
