@@ -23,7 +23,7 @@ def get_template(request, name, is_mockup=False):
     context['template_name'] = name
     if is_mockup:
         add_messages_from_request(request)
-        context['form'] = FormFactory(data=request.POST or request.GET)
+        context['form'] = FormFactory(data=request.POST or request.GET or None)
         template = 'styleguide/mockups/%s.html' % (name,)
     else:
         template = 'bootstrap_docs/%s.html' % (name,)
