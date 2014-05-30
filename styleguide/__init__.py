@@ -23,8 +23,8 @@ if not STYLE_GUIDE_CONFIG['css_root']:
 
 if not STYLE_GUIDE_CONFIG['style_files']:
     style_type = STYLE_GUIDE_CONFIG['type']
-    input_file = 'style.scss' if style_type == 'sass' else 'style.less'
-    STYLE_GUIDE_CONFIG['style_files'] = ((input_file, 'style.css'),)
+    input_file = 'sass/style.scss' if style_type == 'sass' else 'less/style.less'
+    STYLE_GUIDE_CONFIG['style_files'] = ((input_file, 'css/style.css'),)
 
 
 def get_context():
