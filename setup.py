@@ -42,16 +42,28 @@ class PrepareStaticAndTemplatesCommand(Command):
         copytree('bootstrap/less', less_dir)
 
     def copy_bootstrap_fonts_files_to_static(self):
-        less_dir = os.path.join(self.STATIC_DIR, 'fonts')
+        less_dir = os.path.join(self.STATIC_DIR, 'fonts/glyphicons')
         if os.path.exists(less_dir):
             rmtree(less_dir)
         copytree('bootstrap/fonts', less_dir)
 
     def copy_bootstrap_sass_files_to_static(self):
-        less_dir = os.path.join(self.STATIC_DIR, 'sass/bootstrap')
-        if os.path.exists(less_dir):
-            rmtree(less_dir)
-        copytree('bootstrap-sass/vendor/assets/stylesheets/bootstrap', less_dir)
+        sass_dir = os.path.join(self.STATIC_DIR, 'sass/bootstrap')
+        if os.path.exists(sass_dir):
+            rmtree(sass_dir)
+        copytree(
+            'bootstrap-sass/vendor/assets/stylesheets/bootstrap', sass_dir)
+
+    def change_fonts_url(self):
+        sass_dir = os.path.join(self.STATIC_DIR, 'sass/bootstrap')
+        variables_path = os.path.join(sass_dir, '_variables.scss')
+        variable = '$icon-font-path: "%s"'
+        with open(variables_path, 'r') as variables:
+            new_variables = variables.read().replace(
+                variable % 'bootstrap/',
+                variable % '../fonts/glyphicons/')
+        with open(variables_path, 'w') as variables:
+            variables.write(new_variables)
 
     def initialize_options(self):
         pass
@@ -70,7 +82,8 @@ class PrepareStaticAndTemplatesCommand(Command):
         self.copy_bootstrap_sass_files_to_static()
         print('Copy bootstrap fonts')
         self.copy_bootstrap_fonts_files_to_static()
-
+        print('Change fonts url')
+        self.change_fonts_url()
 
 CLASSIFIERS = [
     'Environment :: Web Environment',
