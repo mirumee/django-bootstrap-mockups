@@ -106,12 +106,12 @@ setup(
     author_email='hello@mirumee.com',
     description='Web style guide based on bootstrap',
     license='BSD',
-    version='0.1.0',
+    version='0.1.1',
     url='https://github.com/mirumee/django-bootstrap-mockups',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Django>=1.6.5',
+        'Django>=1.6.0',
         'watchdog>=0.7.1'
     ],
     classifiers=CLASSIFIERS,
